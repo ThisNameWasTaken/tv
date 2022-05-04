@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Service xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="GroupChat" testDepth="2" multiTest="true" xsi:noNamespaceSchemaLocation="ServiceSchema.xsd">
+  <Protocol name="GroupChat">
+    <Memory name="GroupChat">
+      <!--  zero, one, false, true constants  -->
+      <Constant name="true" type="Boolean">true</Constant>
+      <Constant name="false" type="Boolean">false</Constant>
+      <Constant name="one" type="Integer">1</Constant>
+      <Constant name="zero" type="Integer">0</Constant>
+      <Constant name="negativeOne" type="Integer">-1</Constant>
+      <Constant name="emptyString" type="String" />
+
+      <Constant name="member1" type="User">Member1</Constant>
+      <Constant name="member2" type="User">Member2</Constant>
+      <Constant name="member3" type="User">Member3</Constant>
+
+      <Constant name="validMessage" type="String">valid</Constant>
+
+      <Constant name="initialMembers" type="Map[User,Boolean]">{Member1:true, Member2:true}</Constant>
+      <Constant name="initialMessages" type="List[Message]" />
+
+      <Variable name="chatMembers" type="List[User]" />
+      <Variable name="chatMessages" type="List[Message]" />
+
+      <Variable name="chatMessagesLength" type="Integer" />
+
+      <Binding>
+        <Assignment name="equals">
+          <Variable name="chatMembers" />
+          <Constant name="initialMembers" />
+        </Assignment>
+        <Assignment name="equals">
+          <Variable name="chatMessages" />
+          <Constant name="initialMessages" />
+        </Assignment>
+        <Assignment name="equals">
+          <Variable name="chatMessagesLength" />
+          <Constant name="zero" />
+        </Assignment>
+      </Binding>
+    </Memory>
+
+    <Operation name="openChat">
+      <Scenario name="openChat/ok"></Scenario>
+    </Operation>
+
+    <Operation name="closeChat">
+      <Scenario name="closeChat/ok">
+        <Effect>
+          <!-- Reset the messages -->
+          <Assignment name="equals">
+            <Variable name="chatMessages" />
+            <Constant name="initialMessages" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+    </Operation>
+
+    <Operation name="addMember">
+      <Input name="member" type="User" />
+      <Output name="result" type="Boolean" />
+
+      <Scenario name="addMember/ok">
+        <Binding>
+          <Assignment name="equals">
+            <Input name="member" />
+            <Constant name="member3" />
+          </Assignment>
+        </Binding>
+
+        <Condition>
+          <!-- User is not in the group chat -->
+          <Comparison name="equals">
+            <Manipulation name="searchAt" type="Boolean">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Manipulation>
+            <Constant name="false" />
+          </Comparison>
+        </Condition>
+
+        <Effect>
+          <Assignment name="equals">
+            <Variable name="chatMembers" />
+            <Manipulation name="insert">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Manipulation>
+          </Assignment>
+
+          <Assignment name="equals">
+            <Output name="result" />
+            <Constant name="true" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+
+      <Scenario name="addMember/error">
+        <Binding>
+          <Assignment name="equals">
+            <Input name="member" />
+            <Constant name="member1" />
+          </Assignment>
+        </Binding>
+
+        <Condition>
+          <!-- User is already in the group chat -->
+          <Comparison name="equals">
+            <Manipulation name="searchAt" type="Boolean">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Manipulation>
+            <Constant name="true" />
+          </Comparison>
+        </Condition>
+
+        <Effect>
+          <Assignment name="equals">
+            <Output name="result" />
+            <Constant name="false" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+    </Operation>
+
+    <Operation name="removeMember">
+      <!--  Remove member from group chat  -->
+      <Input name="member" type="User" />
+      <Output name="result" type="boolean" />
+
+      <Scenario name="removeMember/ok">
+        <Binding>
+          <Assignment name="equals">
+            <Input name="member" />
+            <Constant name="member1" />
+          </Assignment>
+        </Binding>
+
+        <Condition>
+          <!-- User is in the group chat -->
+          <Comparison name="equals">
+            <Manipulation name="searchAt" type="Boolean">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Manipulation>
+            <Constant name="true" />
+          </Comparison>
+        </Condition>
+
+        <Effect>
+          <!-- Remove the user -->
+          <Assignment name="equals">
+            <Variable name="chatMembers" />
+            <Manipulation name="removeAt">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Manipulation>
+          </Assignment>
+
+          <!-- Removal was succesful -->
+          <Assignment name="equals">
+            <Output name="result" />
+            <Constant name="true" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+
+      <Scenario name="removeMember/error">
+        <Binding>
+          <Assignment name="equals">
+            <Input name="member" />
+            <Constant name="member3" />
+          </Assignment>
+        </Binding>
+
+        <Condition>
+          <!-- User is not in the group chat -->
+          <Comparison name="notEquals">
+            <Manipulation name="searchAt" type="Boolean">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Manipulation>
+            <Constant name="true" />
+          </Comparison>
+        </Condition>
+
+        <Effect>
+          <!-- Removal was unsuccesful -->
+          <Assignment name="equals">
+            <Output name="result" />
+            <Constant name="false" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+    </Operation>
+
+    <Operation name="addMessage">
+      <Input name="text" type="String" />
+      <Input name="member" type="User" />
+      <Output name="result" type="Boolean" />
+
+      <Scenario name="addMessage/ok">
+        <Binding>
+          <Assignment name="equals">
+            <Input name="text" />
+            <Constant name="validMessage" />
+          </Assignment>
+
+          <Assignment name="equals">
+            <Input name="member" />
+            <Constant name="member1" />
+          </Assignment>
+        </Binding>
+
+        <Condition>
+          <Proposition name="and">
+            <!-- Text is not empty -->
+            <Comparison name="notEquals">
+              <Input name="text" />
+              <Constant name="emptyString" />
+            </Comparison>
+
+            <!-- User is in the group chat -->
+            <Comparison name="equals">
+              <Manipulation name="searchAt" type="Boolean">
+                <Variable name="chatMembers" />
+                <Input name="member" />
+              </Manipulation>
+              <Constant name="true" />
+            </Comparison>
+          </Proposition>
+        </Condition>
+
+        <Effect>
+          <Assignment name="equals">
+            <Variable name="chatMessages" />
+            <Manipulation name="insert">
+              <Variable name="chatMessages" />
+              <Input name="text" />
+            </Manipulation>
+          </Assignment>
+
+          <Assignment name="equals">
+            <Output name="result" />
+            <Constant name="true" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+
+      <Scenario name="addMessage/error">
+        <Binding>
+          <Assignment name="equals">
+            <Input name="text" />
+            <Constant name="emptyString" />
+          </Assignment>
+
+          <Assignment name="equals">
+            <Input name="member" />
+            <Constant name="member3" />
+          </Assignment>
+        </Binding>
+
+        <Condition>
+          <Proposition name="or">
+            <!-- Text is empty -->
+            <Comparison name="equals">
+              <Input name="text" />
+              <Constant name="emptyString" />
+            </Comparison>
+
+            <!-- User is not in the group chat -->
+            <Comparison name="equals">
+              <Manipulation name="searchAt" type="Boolean">
+                <Variable name="chatMembers" />
+                <Input name="member" />
+              </Manipulation>
+              <Constant name="false" />
+            </Comparison>
+          </Proposition>
+        </Condition>
+
+        <Effect>
+          <Assignment name="equals">
+            <Output name="result" />
+            <Constant name="false" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+    </Operation>
+
+    <Operation name="removeMessage">
+      <Input name="messageIndex" type="Integer" />
+      <Input name="member" type="User" />
+      <Output name="result" type="Boolean" />
+
+      <Scenario name="removeMessage/ok">
+        <Binding>
+          <Assignment name="equals">
+            <Input name="messageIndex" />
+            <Constant name="zero" />
+          </Assignment>
+
+          <Assignment name="equals">
+            <Input name="member" />
+            <Constant name="member1" />
+          </Assignment>
+        </Binding>
+
+        <Condition>
+          <Proposition name="and">
+            <!-- Index is not out of bounds -->
+            <Comparison name="moreThan">
+              <Input name="messageIndex" />
+              <Constant name="negativeOne" />
+            </Comparison>
+
+            <!-- Index is not out of bounds -->
+            <Comparison name="lessThan">
+              <Input name="messageIndex" />
+              <Manipulation name="size" type="Integer">
+                <Variable name="chatMessages" />
+              </Manipulation>
+            </Comparison>
+
+            <!-- User is in the group chat -->
+            <Comparison name="equals">
+              <Manipulation name="searchAt" type="Boolean">
+                <Variable name="chatMembers" />
+                <Input name="member" />
+              </Manipulation>
+              <Constant name="true" />
+            </Comparison>
+          </Proposition>
+        </Condition>
+
+        <Effect>
+          <!-- Remove the message -->
+          <Assignment name="equals">
+            <Variable name="chatMessages" />
+            <Manipulation name="removeAt">
+              <Variable name="chatMessages" />
+              <Input name="messageIndex" />
+            </Manipulation>
+          </Assignment>
+
+          <!-- Removal was succesful -->
+          <Assignment name="equals">
+            <Output name="result" />
+            <Constant name="true" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+
+      <Scenario name="removeMessage/error">
+        <Binding>
+          <Assignment name="equals">
+            <Input name="messageIndex" />
+            <Constant name="negativeOne" />
+          </Assignment>
+
+          <Assignment name="equals">
+            <Input name="member" />
+            <Constant name="member3" />
+          </Assignment>
+        </Binding>
+
+        <Condition>
+          <Proposition name="or">
+            <!-- Index is out of bounds -->
+            <Comparison name="lessThan">
+              <Input name="messageIndex" />
+              <Constant name="zero" />
+            </Comparison>
+
+            <!-- Index is out of bounds -->
+            <Comparison name="equals">
+              <Input name="messageIndex" />
+              <Manipulation name="size" type="Integer">
+                <Variable name="chatMessages" />
+              </Manipulation>
+            </Comparison>
+
+            <!-- Index is out of bounds -->
+            <Comparison name="moreThan">
+              <Input name="messageIndex" />
+              <Manipulation name="size" type="Integer">
+                <Variable name="chatMessages" />
+              </Manipulation>
+            </Comparison>
+
+            <!-- User is not in the group chat -->
+            <Comparison name="equals">
+              <Manipulation name="searchAt" type="Boolean">
+                <Variable name="chatMembers" />
+                <Input name="member" />
+              </Manipulation>
+              <Constant name="false" />
+            </Comparison>
+          </Proposition>
+        </Condition>
+
+        <Effect>
+          <Assignment name="equals">
+            <Output name="result" />
+            <Constant name="false" />
+          </Assignment>
+        </Effect>
+      </Scenario>
+    </Operation>
+
+  </Protocol>
+
+  <Machine name="GroupChat">
+    <State name="Ready" initial="true">
+      <Transition name="openChat/ok" source="Ready" target="Chat" />
+      <Transition name="closeChat/ok" source="Ready" target="Ready" />
+    </State>
+
+    <State name="Chat">
+      <Transition name="addMember/ok" source="Chat" target="Chat" />
+      <Transition name="addMember/error" source="Chat" target="Chat" />
+      <Transition name="removeMember/ok" source="Chat" target="Chat" />
+      <Transition name="removeMember/error" source="Chat" target="Chat" />
+      <Transition name="addMessage/ok" source="Chat" target="Checkout" />
+      <Transition name="addMessage/error" source="Chat" target="Chat" />
+      <Transition name="removeMessage/ok" source="Chat" target="Chat" />
+      <Transition name="removeMessage/error" source="Chat" target="Chat" />
+      <Transition name="closeChat/ok" source="Chat" target="Ready" />
+    </State>
+  </Machine>
+</Service>
