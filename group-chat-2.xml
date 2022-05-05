@@ -3,7 +3,6 @@
 <Service xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="GroupChat" testDepth="2" multiTest="true" xsi:noNamespaceSchemaLocation="ServiceSchema.xsd">
   <Protocol name="GroupChat">
     <Memory name="GroupChat">
-      <!--  zero, one, false, true constants  -->
       <Constant name="true" type="Boolean">true</Constant>
       <Constant name="false" type="Boolean">false</Constant>
       <Constant name="one" type="Integer">1</Constant>
@@ -17,10 +16,10 @@
 
       <Constant name="validMessage" type="String">valid</Constant>
 
-      <Constant name="initialMembers" type="Map[User,Boolean]">{member1:true, member2:true}</Constant>
+      <Constant name="initialMembers" type="List[User]">[member1,member2]</Constant>
       <Constant name="initialMessages" type="List[Message]" />
 
-      <Variable name="chatMembers" type="Map[User,Boolean]" />
+      <Variable name="chatMembers" type="List[User]" />
       <Variable name="chatMessages" type="List[Message]" />
 
       <Variable name="chatMessagesLength" type="Integer" />
@@ -71,13 +70,10 @@
 
         <Condition>
           <!-- User is not in the group chat -->
-          <Comparison name="equals">
-            <Manipulation name="searchAt">
-              <Variable name="chatMembers" />
-              <Input name="member" />
-            </Manipulation>
-            <Constant name="false" />
-          </Comparison>
+          <Membership name="excludes">
+            <Variable name="chatMembers" />
+            <Input name="member" />
+          </Membership>
         </Condition>
 
         <Effect>
@@ -106,13 +102,10 @@
 
         <Condition>
           <!-- User is already in the group chat -->
-          <Comparison name="equals">
-            <Manipulation name="searchAt">
-              <Variable name="chatMembers" />
-              <Input name="member" />
-            </Manipulation>
-            <Constant name="true" />
-          </Comparison>
+          <Membership name="includes">
+            <Variable name="chatMembers" />
+            <Input name="member" />
+          </Membership>
         </Condition>
 
         <Effect>
@@ -139,13 +132,10 @@
 
         <Condition>
           <!-- User is in the group chat -->
-          <Comparison name="equals">
-            <Manipulation name="searchAt">
-              <Variable name="chatMembers" />
-              <Input name="member" />
-            </Manipulation>
-            <Constant name="true" />
-          </Comparison>
+          <Membership name="includes">
+            <Variable name="chatMembers" />
+            <Input name="member" />
+          </Membership>
         </Condition>
 
         <Effect>
@@ -176,13 +166,10 @@
 
         <Condition>
           <!-- User is not in the group chat -->
-          <Comparison name="notEquals">
-            <Manipulation name="searchAt">
-              <Variable name="chatMembers" />
-              <Input name="member" />
-            </Manipulation>
-            <Constant name="true" />
-          </Comparison>
+          <Membership name="excludes">
+            <Variable name="chatMembers" />
+            <Input name="member" />
+          </Membership>
         </Condition>
 
         <Effect>
@@ -222,13 +209,10 @@
             </Comparison>
 
             <!-- User is in the group chat -->
-            <Comparison name="equals">
-              <Manipulation name="searchAt">
-                <Variable name="chatMembers" />
-                <Input name="member" />
-              </Manipulation>
-              <Constant name="true" />
-            </Comparison>
+            <Membership name="includes">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Membership>
           </Proposition>
         </Condition>
 
@@ -270,13 +254,10 @@
             </Comparison>
 
             <!-- User is not in the group chat -->
-            <Comparison name="equals">
-              <Manipulation name="searchAt">
-                <Variable name="chatMembers" />
-                <Input name="member" />
-              </Manipulation>
-              <Constant name="false" />
-            </Comparison>
+            <Membership name="excludes">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Membership>
           </Proposition>
         </Condition>
 
@@ -324,13 +305,10 @@
             </Comparison>
 
             <!-- User is in the group chat -->
-            <Comparison name="equals">
-              <Manipulation name="searchAt">
-                <Variable name="chatMembers" />
-                <Input name="member" />
-              </Manipulation>
-              <Constant name="true" />
-            </Comparison>
+            <Membership name="includes">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Membership>
           </Proposition>
         </Condition>
 
@@ -390,13 +368,10 @@
             </Comparison>
 
             <!-- User is not in the group chat -->
-            <Comparison name="equals">
-              <Manipulation name="searchAt">
-                <Variable name="chatMembers" />
-                <Input name="member" />
-              </Manipulation>
-              <Constant name="false" />
-            </Comparison>
+            <Membership name="excludes">
+              <Variable name="chatMembers" />
+              <Input name="member" />
+            </Membership>
           </Proposition>
         </Condition>
 
