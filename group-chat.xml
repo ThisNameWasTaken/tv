@@ -20,7 +20,7 @@
       <Constant name="initialMembers" type="Map[User,Boolean]">{Member1:true, Member2:true}</Constant>
       <Constant name="initialMessages" type="List[Message]" />
 
-      <Variable name="chatMembers" type="List[User]" />
+      <Variable name="chatMembers" type="Map[User,Boolean]" />
       <Variable name="chatMessages" type="List[Message]" />
 
       <Variable name="chatMessagesLength" type="Integer" />
@@ -72,7 +72,7 @@
         <Condition>
           <!-- User is not in the group chat -->
           <Comparison name="equals">
-            <Manipulation name="searchAt" type="Boolean">
+            <Manipulation name="searchAt">
               <Variable name="chatMembers" />
               <Input name="member" />
             </Manipulation>
@@ -107,7 +107,7 @@
         <Condition>
           <!-- User is already in the group chat -->
           <Comparison name="equals">
-            <Manipulation name="searchAt" type="Boolean">
+            <Manipulation name="searchAt">
               <Variable name="chatMembers" />
               <Input name="member" />
             </Manipulation>
@@ -140,7 +140,7 @@
         <Condition>
           <!-- User is in the group chat -->
           <Comparison name="equals">
-            <Manipulation name="searchAt" type="Boolean">
+            <Manipulation name="searchAt">
               <Variable name="chatMembers" />
               <Input name="member" />
             </Manipulation>
@@ -177,7 +177,7 @@
         <Condition>
           <!-- User is not in the group chat -->
           <Comparison name="notEquals">
-            <Manipulation name="searchAt" type="Boolean">
+            <Manipulation name="searchAt">
               <Variable name="chatMembers" />
               <Input name="member" />
             </Manipulation>
@@ -223,7 +223,7 @@
 
             <!-- User is in the group chat -->
             <Comparison name="equals">
-              <Manipulation name="searchAt" type="Boolean">
+              <Manipulation name="searchAt">
                 <Variable name="chatMembers" />
                 <Input name="member" />
               </Manipulation>
@@ -271,7 +271,7 @@
 
             <!-- User is not in the group chat -->
             <Comparison name="equals">
-              <Manipulation name="searchAt" type="Boolean">
+              <Manipulation name="searchAt">
                 <Variable name="chatMembers" />
                 <Input name="member" />
               </Manipulation>
@@ -325,7 +325,7 @@
 
             <!-- User is in the group chat -->
             <Comparison name="equals">
-              <Manipulation name="searchAt" type="Boolean">
+              <Manipulation name="searchAt">
                 <Variable name="chatMembers" />
                 <Input name="member" />
               </Manipulation>
@@ -391,7 +391,7 @@
 
             <!-- User is not in the group chat -->
             <Comparison name="equals">
-              <Manipulation name="searchAt" type="Boolean">
+              <Manipulation name="searchAt">
                 <Variable name="chatMembers" />
                 <Input name="member" />
               </Manipulation>
