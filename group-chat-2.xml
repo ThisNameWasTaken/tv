@@ -11,13 +11,13 @@
       <Constant name="negativeOne" type="Integer">-1</Constant>
       <Constant name="emptyString" type="String" />
 
-      <Constant name="member1" type="User">Member1</Constant>
-      <Constant name="member2" type="User">Member2</Constant>
-      <Constant name="member3" type="User">Member3</Constant>
+      <Constant name="member1" type="User">member1</Constant>
+      <Constant name="member2" type="User">member2</Constant>
+      <Constant name="member3" type="User">member3</Constant>
 
       <Constant name="validMessage" type="String">valid</Constant>
 
-      <Constant name="initialMembers" type="Map[User,Boolean]">{Member1:true, Member2:true}</Constant>
+      <Constant name="initialMembers" type="Map[User,Boolean]">{member1:true, member2:true}</Constant>
       <Constant name="initialMessages" type="List[Message]" />
 
       <Variable name="chatMembers" type="Map[User,Boolean]" />
