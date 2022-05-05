@@ -120,7 +120,7 @@
     <Operation name="removeMember">
       <!--  Remove member from group chat  -->
       <Input name="member" type="User" />
-      <Output name="result" type="boolean" />
+      <Output name="result" type="Boolean" />
 
       <Scenario name="removeMember/ok">
         <Binding>
