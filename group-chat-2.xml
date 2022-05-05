@@ -142,7 +142,7 @@
           <!-- Remove the user -->
           <Assignment name="equals">
             <Variable name="chatMembers" />
-            <Manipulation name="removeAt">
+            <Manipulation name="remove">
               <Variable name="chatMembers" />
               <Input name="member" />
             </Manipulation>
@@ -316,7 +316,7 @@
           <!-- Remove the message -->
           <Assignment name="equals">
             <Variable name="chatMessages" />
-            <Manipulation name="removeAt">
+            <Manipulation name="remove">
               <Variable name="chatMessages" />
               <Input name="messageIndex" />
             </Manipulation>
